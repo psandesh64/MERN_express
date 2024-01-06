@@ -3,21 +3,21 @@ const app = express()
 const PORT = 3001
 
 app.use(express.json())
-let students = [
+let phonebook = [
     {
         id : 1,
-        name : 'Bryan',
-        age : 24
+        name : 'Arto Hellas',
+        number : 9856325612
     },
     {
         id : 2,
-        name : 'Saphire',
-        age : 29
+        name : 'Ada Lovelace',
+        number : 9856893265
     },
     {
         id : 3,
-        name : 'Koran',
-        age : 25
+        name : 'Dan Abranov',
+        number : 9854785632
     },
 ]
 const requestLogger = (request,response,next) => {
@@ -37,23 +37,24 @@ const unknownEndpoint = (request,response) => {
 app.get('/',(request,response)=>{
     response.send('<h1>This is my home page</h1>');
 })
-app.get('/students',(request,response) => {
-    response.json(students)
+app.get('/api/persons',(request,response) => {
+    response.json(phonebook)
 })
-app.get('/students/:id',(request,response) => {
+app.get('/api/persons/:id',(request,response) => {
     const id = Number(request.params.id)
-    const student = students.find( data => data.id === id )
-    student ? response.json(student) : response.status(404).end()
+    const person = phonebook.find( data => data.id === id )
+    student ? response.json(person) : response.status(404).end()
 })
-app.delete('/students/:id',(request,response) => {
+app.delete('/api/persons/:id',(request,response) => {
     const id = Number(request.params.id)
-    students = students.filter(data => data.id !== id)
+    phonebook = phonebook.filter(data => data.id !== id)
     response.status(204).end()
 })
-app.post('/students',(request,response) => {
-    const student = request.body
-    students.push(student)
-    response.json(student)
+app.post('/api/persons',(request,response) => {
+    const person = request.body
+    person.id = Math.round(Math.random()*1000)
+    phonebook.push(person)
+    response.status(200).send('Data Added')
 })
 app.use(unknownEndpoint)
 
