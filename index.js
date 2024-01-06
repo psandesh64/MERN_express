@@ -50,12 +50,7 @@ app.delete('/api/persons/:id',(request,response) => {
     phonebook = phonebook.filter(data => data.id !== id)
     response.status(204).end()
 })
-app.post('/api/persons',(request,response) => {
-    const person = request.body
-    person.id = Math.round(Math.random()*1000)
-    phonebook.push(person)
-    response.status(200).send('Data Added')
-})
+
 app.use(unknownEndpoint)
 
 app.listen(PORT,() => console.log(`Server running on http://localhost:${PORT}`))
