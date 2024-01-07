@@ -53,8 +53,16 @@ app.delete('/api/persons/:id',(request,response) => {
 app.post('/api/persons',(request,response) => {
     const person = request.body
     person.id = Math.round(Math.random()*1000)
-    phonebook.push(person)
-    response.status(200).send('Data Added')
+    if (!phonebook.find(data => data.name === person.name)){
+    if (person.name && person.number) {
+        phonebook.push(person);
+        response.status(200).send('Data Added')}
+    else {response.status(400).send({ 
+        error: 'Name or number is missing in the request body' })
+    }}
+    else {response.status(400).send({ 
+        error: 'Name already exist in the phonebook' })}
+    
 })
 app.use(unknownEndpoint)
 
